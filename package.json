@@ -1,8 +1,43 @@
 {
   "name": "win32-api",
-  "version": "1.0.0",
+  "author": "waiting",
+  "version": "9.5.0",
   "description": "FFI definitions of windows win32 api for node-ffi",
-  "private": true,
+  "keywords": [
+    "windows",
+    "win32",
+    "api",
+    "kernel32",
+    "user32",
+    "comctl32",
+    "ffi",
+    "typescript",
+    "ts"
+  ],
+  "bin": {},
+  "browser": "",
+  "es2015": "./dist/index.esm.js",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/waitingsong/node-win32-api/issues"
+  },
+  "homepage": "https://waitingsong.github.io/node-win32-api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waitingsong/node-win32-api.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/ffi-napi": "*",
+    "@types/ref-napi": "^1.4.0",
+    "@types/ref-union-di": "^1.0.0",
+    "ffi-napi": "^2.5.0",
+    "ref-napi": "^2.0.0",
+    "ref-union-di": "^1.0.1",
+    "win32-def": "^9.4.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "8",
     "@commitlint/config-conventional": "8",
@@ -11,11 +46,14 @@
     "@types/mocha": "7",
     "@types/node": "14",
     "@types/power-assert": "1",
+    "@types/ref-struct-di": "^1.1.0",
     "@types/rewire": "2",
     "@types/rimraf": "3",
     "@types/yargs": "15",
     "@waiting/eslint-config": "5",
+    "@waiting/shared-core": "3",
     "coveralls": "3",
+    "cross-env": "7",
     "debug": "^4.1.0",
     "eslint": "7",
     "espower-typescript": "9",
@@ -25,10 +63,12 @@
     "mocha-lcov-reporter": "1",
     "nyc": "15",
     "power-assert": "1",
+    "ref-struct-di": "^1.1.0",
     "rewire": "5",
     "rimraf": "3",
     "rollup": "2",
     "rollup-plugin-terser": "6",
+    "rxjs": "^6.5.2",
     "rxrunscript": "5",
     "ts-node": "8",
     "typescript": "3",
@@ -37,43 +77,39 @@
   "engines": {
     "node": ">=10.16.0"
   },
+  "files": [
+    "bin/*.js",
+    "dist"
+  ],
   "scripts": {
-    "bp:add": "git remote add bp https://github.com/waitingsong/npm-mono-base",
-    "bp:sync": "git fetch --all -v && git merge bp/master -m \"Merge remote-tracking branch 'bp/master'\"",
-    "bootstrap": "lerna bootstrap --loglevel notice",
-    "build": "sh .scripts/build.sh",
-    "ci": "npm run build && npm run cov",
-    "clean": "lerna clean --loglevel error --yes && lerna run clean && npm run clean:lock && npm run clean:cache",
-    "clean:cache": "rm packages/*/.eslintcache -f",
-    "clean:lock": "rm packages/*/package-lock.json -f",
-    "cov": "lerna run cov --concurrency=1",
-    "doc": "node .githooks/doc.js",
-    "lint": "lerna run lint --parallel",
-    "lint:nofix": "lerna run lint:nofix --parallel",
-    "pub": "sh .scripts/publish.sh --create-release github",
-    "pub:canary": "sh .scripts/publish.sh --canary",
-    "pub:beta": "sh .scripts/publish.sh --dist-tag beta --force-publish=*",
-    "pub:next": "sh .scripts/publish.sh --dist-tag next",
-    "purge": "npm run clean && rm node_modules -rf",
-    "repo:init": "sh .githooks/init-repo.sh",
-    "reset": "npm run purge && npm i && npm run ci",
-    "test": "lerna run test"
+    "build": "npm run tsc && npm run rp",
+    "clean": "rm -rf dist/* .vscode/.tsbuildinfo .vscode/.tsbuildinfo.* ",
+    "cov": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
+    "lint": "eslint --fix --cache {src,test}/**/*.ts",
+    "lint:nofix": "eslint --cache {src,test}/**/*.ts",
+    "rp": "rollup -c rollup.config.js",
+    "rp:w": "npm run tsc:w | rollup -wc rollup.config.js",
+    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha",
+    "test:browser": "cd .config && npm run browser && cd ..",
+    "tsc": "tsc -p tsconfig.json",
+    "tsc:w": "tsc -p tsconfig.json -w"
   },
+  "os": [
+    "win32"
+  ],
   "nyc": {
     "include": [
-      "packages/*/src/*.ts",
-      "packages/*/src/**/*.ts"
+      "src/**/*.ts"
     ],
     "exclude": [
       ".githooks",
+      "dist",
       "node_modules*",
-      "**/src/bin",
-      "**/src/domain.ts",
-      "**/src/interface.ts",
-      "**/dist",
+      "src/bin",
+      "src/domain.ts",
+      "src/interface.ts",
+      "test*",
       "**/node_modules*",
-      "**/test",
-      "**/test*",
       "**/*.d.ts",
       "**/*.js"
     ],
@@ -81,6 +117,7 @@
       ".ts"
     ],
     "reporter": [
+      "text-summary",
       "json",
       "html"
     ],

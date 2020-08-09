@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "packages/*/src/**/*.ts",
-    "packages/*/test/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "test_browser/**/*.ts"
   ],
   "exclude": [
     "asset",

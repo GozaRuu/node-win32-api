@@ -4,8 +4,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "incremental": true,
-    "inlineSourceMap": true,
-    "module": "commonjs",
+    "module": "ES6",
+    "moduleResolution": "node",
     "newLine": "lf",
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
@@ -14,13 +14,12 @@
     "pretty": true,
     "skipLibCheck": true,
     "strict": true,
-    "stripInternal": true,
     "target": "ES2019",
     "tsBuildInfoFile": ".vscode/.tsbuildinfo",
     "types" : ["node", "mocha"]
   },
   "include": [
-    "packages/*/src/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "asset",
