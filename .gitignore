@@ -86,7 +86,6 @@ log.txt
 .versions/
 www/
 bazel-out/
-dist/
 out-tsc/
 tmp/
 temp/
