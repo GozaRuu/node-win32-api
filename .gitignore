@@ -21,7 +21,6 @@ Thumbs.db
 
 *.__built-tables.ts
 *.bak
-*.d.ts
 *.map
 *.md5
 *.[oa]
